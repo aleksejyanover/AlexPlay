@@ -11,7 +11,11 @@ export default function AppCard({ app }) {
       <div className="card-dev">{app.dev}</div>
       <div className="card-meta">
         <span className="card-rating">★ {app.rating.toFixed(1)}</span>
-        <span className="card-cat">{app.category}</span>
+        {app.price !== 'Бесплатно' ? (
+          <span className="price-tag">{app.price}</span>
+        ) : (
+          <span className="card-cat">{app.category}</span>
+        )}
       </div>
     </Link>
   );

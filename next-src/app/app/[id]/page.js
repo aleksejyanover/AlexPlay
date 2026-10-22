@@ -11,6 +11,7 @@ import Tile from '@/components/Tile';
 import Gallery from '@/components/Gallery';
 import DownloadButtons from '@/components/DownloadButtons';
 import AppCard from '@/components/AppCard';
+import Reviews from '@/components/Reviews';
 
 // Статическая генерация всех карточек приложений (output: 'export').
 export function generateStaticParams() {
@@ -86,7 +87,7 @@ export default async function AppPage({ params }) {
             </span>
           </div>
 
-          <DownloadButtons links={app.links} />
+          <DownloadButtons appId={app.id} links={app.links} />
 
           <Histogram dist={app.dist} />
         </div>
@@ -156,6 +157,9 @@ export default async function AppPage({ params }) {
           ))}
         </div>
       </section>
+
+      {/* Отзывы: gate → форма (после первого запуска) → свой отзыв → отзывы из данных */}
+      <Reviews app={app} />
 
       {/* Похожие приложения */}
       {similar.length > 0 && (

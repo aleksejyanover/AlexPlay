@@ -21,6 +21,10 @@ const SECTIONS = [
     list: [...ALL_APPS].sort((a, b) => b.reviews - a.reviews).slice(0, 8),
   },
   {
+    title: 'Платные',
+    list: ALL_APPS.filter((a) => a.price !== 'Бесплатно'),
+  },
+  {
     title: 'Новинки',
     list: [...ALL_APPS].sort((a, b) => (a.added < b.added ? 1 : -1)).slice(0, 8),
   },
