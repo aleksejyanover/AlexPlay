@@ -1,0 +1,6 @@
+node_modules/
+dist-next-check
+.DS_Store
+next-src/.next/
+next-src/out/
+react-src/dist/
