@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Разработчикам — Alex Play</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%237C5CFF'/><text x='50' y='68' font-size='52' text-anchor='middle'>▶</text></svg>">
+</head>
+<body>
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a class="logo" href="index.html"><span class="logo-mark">▶</span><span><b>Alex</b> Play</span></a>
+      <nav class="nav">
+        <a href="index.html">Главная</a>
+        <a href="index.html?cat=Игры">Игры</a>
+        <a href="index.html?cat=Приложения">Приложения</a>
+      </nav>
+      <div class="search">
+        <span class="ico">🔍</span>
+        <input id="q" type="search" placeholder="Найти приложение или игру" autocomplete="off">
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap doc">
+
+    <h1>Разработчикам</h1>
+    <p class="lead">Хотите видеть своё приложение в Alex Play? Это просто.</p>
+    <h2>Как добавить приложение</h2>
+    <ul>
+      <li>Пришлите ссылку на приложение (ссылка на App Store, APK-файл или сайт)</li>
+      <li>Название, короткое описание (2–3 предложения) и категорию</li>
+      <li>Скриншоты — 3–4 штуки (или мы подберём оформление сами)</li>
+    </ul>
+    <h2>Что важно знать</h2>
+    <ul>
+      <li>Приложение проверяется перед публикацией: работает ссылка, есть описание, нет вредоносного контента</li>
+      <li>Публикация бесплатна</li>
+      <li>Обновления версий и ссылок размещаются автоматически</li>
+    </ul>
+    <p>Заявки и вопросы — через <a class="inline" href="support.html">страницу поддержки</a>.</p>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <a class="logo" href="index.html" style="margin-bottom:10px"><span class="logo-mark">▶</span><span><b>Alex</b> Play</span></a>
+        <div class="copy">Приложения для iPhone и Android</div>
+      </div>
+      <div class="foot-links">
+        <a href="about.html">О проекте</a>
+        <a href="developers.html">Разработчикам</a>
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="support.html">Поддержка</a>
+      </div>
+      <div class="copy">© 2026 Alex Play</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("q").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && this.value.trim())
+        location.href = "index.html?q=" + encodeURIComponent(this.value.trim());
+    });
+  </script>
+</body>
+</html>
