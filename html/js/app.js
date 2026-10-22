@@ -166,14 +166,20 @@
     const cat = p.get("cat") || "";
     qInput.value = q;
 
-    document.querySelectorAll(".nav a").forEach(a => a.classList.remove("on"));
-    if (q) { renderSearch(q); }
+    document.querySelectorAll(".nav a, .mobile-nav a").forEach(a => a.classList.remove("on"));
+    if (q) { renderSearch(q); document.getElementById("m-search")?.classList.add("on"); }
     else if (cat && cat !== "Все") {
       renderCategory(cat);
       const id = cat === "Игры" ? "nav-games" : cat === "Приложения" ? "nav-apps" : null;
       if (id) document.getElementById(id)?.classList.add("on");
+      const mid = cat === "Игры" ? "m-games" : cat === "Приложения" ? "m-apps" : null;
+      if (mid) document.getElementById(mid)?.classList.add("on");
     }
-    else { renderHome(); document.getElementById("nav-home").classList.add("on"); }
+    else {
+      renderHome();
+      document.getElementById("nav-home").classList.add("on");
+      document.getElementById("m-home")?.classList.add("on");
+    }
   }
 
   /* живой поиск */

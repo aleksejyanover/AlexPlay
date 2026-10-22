@@ -6,7 +6,8 @@ const shell = (title, body) => `<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0F1A">
   <title>${title} — Alex Play</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%237C5CFF'/><text x='50' y='68' font-size='52' text-anchor='middle'>▶</text></svg>">
@@ -53,6 +54,13 @@ ${body}
         location.href = "index.html?q=" + encodeURIComponent(this.value.trim());
     });
   </script>
+
+  <nav class="mobile-nav">
+    <a href="index.html"><span class="ico">🏠</span>Главная</a>
+    <a href="index.html?cat=Игры"><span class="ico">🎮</span>Игры</a>
+    <a href="index.html?cat=Приложения"><span class="ico">🧰</span>Приложения</a>
+    <a href="index.html"><span class="ico">🔍</span>Поиск</a>
+  </nav>
 </body>
 </html>
 `;

@@ -87,7 +87,7 @@ export default async function AppPage({ params }) {
             </span>
           </div>
 
-          <DownloadButtons appId={app.id} links={app.links} />
+          <DownloadButtons app={app} />
 
           <Histogram dist={app.dist} />
         </div>

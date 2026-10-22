@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import Tile from '../components/Tile.jsx'
 import AppCard from '../components/AppCard.jsx'
+import CheckoutModal from '../components/CheckoutModal.jsx'
 import { APPS, catEmoji, catHref, fmtNum, stars } from '../utils.js'
 
 const REV_KEY = 'alexplay_reviews'
@@ -16,6 +17,10 @@ function readAllReviews() {
 
 function launchKey(appId) {
   return 'alexplay_launch_' + appId
+}
+
+function paidKey(appId) {
+  return 'alexplay_paid_' + appId
 }
 
 function todayStr() {
@@ -58,11 +63,12 @@ function DlBtn({ href, variant, icon, label, onLaunch }) {
   )
 }
 
-/* Блок действий: «Открыть в браузере» (links.web) + сетка загрузки 2×2 по платформам.
+/* Блок действий (после покупки / бесплатное): «Открыть в браузере» + сетка 2×2.
    Клик по любой активной кнопке = «первый запуск» → открывает форму отзыва. */
-function DlActions({ links, onLaunch }) {
+function DlActions({ links, onLaunch, showPaidHint = false }) {
   return (
     <div className="dl-actions">
+      {showPaidHint && <div className="buy-hint">✓ Покупка завершена — приложение доступно</div>}
       <DlBtn
         href={links.web}
         variant="btn-primary"
@@ -244,8 +250,16 @@ function Reviews({ app, launched }) {
 export default function AppPage({ app }) {
   const [launched, setLaunched] = useState(() => !!localStorage.getItem(launchKey(app.id)))
 
+  /* демо-оплата: платное приложение разблокируется покупкой (alexplay_paid_<id>) */
+  const isPaidApp = app.price !== 'Бесплатно'
+  const [owned, setOwned] = useState(
+    () => !isPaidApp || !!localStorage.getItem(paidKey(app.id)),
+  )
+  const [showPay, setShowPay] = useState(false)
+
   /* первый запуск приложения (клик по любой активной кнопке блока действий)
-     открывает возможность отзывов — ставим alexplay_launch_<id> как в эталоне */
+     открывает возможность отзывов — ставим alexplay_launch_<id> как в эталоне.
+     Кнопка «Купить» запуском НЕ считается. */
   function handleLaunch() {
     localStorage.setItem(launchKey(app.id), '1')
     setLaunched(true)
@@ -273,7 +287,18 @@ export default function AppPage({ app }) {
             {catEmoji(app.category)} {app.category}
           </a>
           <p className="app-price">{app.price}</p>
-          <DlActions links={app.links || {}} onLaunch={handleLaunch} />
+          {owned ? (
+            <DlActions links={app.links || {}} onLaunch={handleLaunch} showPaidHint={isPaidApp} />
+          ) : (
+            <div className="dl-actions">
+              <button className="btn btn-primary" onClick={() => setShowPay(true)}>
+                💳 Купить за {app.price}
+              </button>
+              <div className="plat-label">
+                После покупки откроются кнопки «Открыть в браузере» и загрузки на все платформы
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -402,6 +427,11 @@ export default function AppPage({ app }) {
             ))}
           </div>
         </section>
+      )}
+
+      {/* Модалка демо-оплаты (данные карт — только в полях формы) */}
+      {showPay && (
+        <CheckoutModal app={app} onPaid={() => setOwned(true)} onClose={() => setShowPay(false)} />
       )}
     </>
   )
