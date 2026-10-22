@@ -52,7 +52,8 @@ window.APPS = [
       "ios": "https://aleksejyanover.github.io/atrium/",
       "android": "https://aleksejyanover.github.io/atrium/",
       "mac": "https://aleksejyanover.github.io/atrium/",
-      "windows": "https://aleksejyanover.github.io/atrium/"
+      "windows": "https://aleksejyanover.github.io/atrium/",
+      "web": "https://aleksejyanover.github.io/atrium/"
     },
     "dist": [
       88,
@@ -122,7 +123,8 @@ window.APPS = [
       "ios": "https://telefamily.telefamily.workers.dev",
       "android": "https://telefamily.telefamily.workers.dev",
       "mac": "https://telefamily.telefamily.workers.dev",
-      "windows": "https://telefamily.telefamily.workers.dev"
+      "windows": "https://telefamily.telefamily.workers.dev",
+      "web": "https://telefamily.telefamily.workers.dev"
     },
     "dist": [
       85,
@@ -185,7 +187,8 @@ window.APPS = [
       "ios": "https://aleksejyanover.github.io/hotkeys-trainer/",
       "android": "https://aleksejyanover.github.io/hotkeys-trainer/",
       "mac": "https://aleksejyanover.github.io/hotkeys-trainer/",
-      "windows": "https://aleksejyanover.github.io/hotkeys-trainer/"
+      "windows": "https://aleksejyanover.github.io/hotkeys-trainer/",
+      "web": "https://aleksejyanover.github.io/hotkeys-trainer/"
     },
     "dist": [
       90,
@@ -248,7 +251,8 @@ window.APPS = [
       "ios": "https://aleksejyanover.github.io/gta-alex/index.html",
       "android": "https://aleksejyanover.github.io/gta-alex/index.html",
       "mac": "https://aleksejyanover.github.io/gta-alex/index.html",
-      "windows": "https://aleksejyanover.github.io/gta-alex/index.html"
+      "windows": "https://aleksejyanover.github.io/gta-alex/index.html",
+      "web": "https://aleksejyanover.github.io/gta-alex/index.html"
     },
     "dist": [
       76,
@@ -304,7 +308,8 @@ window.APPS = [
       "ios": "https://aleksejyanover.github.io/fake-virus-prank/",
       "android": "https://aleksejyanover.github.io/fake-virus-prank/",
       "mac": "https://aleksejyanover.github.io/fake-virus-prank/",
-      "windows": "https://aleksejyanover.github.io/fake-virus-prank/"
+      "windows": "https://aleksejyanover.github.io/fake-virus-prank/",
+      "web": "https://aleksejyanover.github.io/fake-virus-prank/"
     },
     "dist": [
       70,
@@ -373,7 +378,8 @@ window.APPS = [
       "ios": "http://localhost:8000/",
       "android": "http://localhost:8000/",
       "mac": "http://localhost:8000/",
-      "windows": "http://localhost:8000/"
+      "windows": "http://localhost:8000/",
+      "web": "http://localhost:8000/"
     },
     "dist": [
       87,
@@ -457,7 +463,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=nova%20task",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -526,7 +533,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=pixel%20rush",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -588,7 +596,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=zen%20focus",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -657,7 +666,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=photo%20ai",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -719,7 +729,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=weather",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -788,7 +799,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=space%20runner",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -850,7 +862,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=money%20track",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -919,7 +932,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=learn%20english",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -981,7 +995,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=meditate",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -1043,7 +1058,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=snake%20game",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -1112,7 +1128,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=chat%20ai",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   },
   {
@@ -1174,7 +1191,8 @@ window.APPS = [
       "ios": "https://apps.apple.com/ru/search?term=music%20player",
       "android": "",
       "mac": "",
-      "windows": ""
+      "windows": "",
+      "web": ""
     }
   }
 ];

@@ -43,9 +43,10 @@
     : `<button class="btn ${cls} btn-soon" disabled>${icon} ${label} · Скоро</button>`;
 
   const L = app.links || {};
+  const openBtn = dlBtn(L.web, "btn-primary", "🌐", "Открыть в браузере");
   const dlGrid = `
     <div class="dl-grid">
-      ${dlBtn(L.ios, "btn-primary", "", "Загрузить для iPhone")}
+      ${dlBtn(L.ios, "btn-ghost", "", "Загрузить для iPhone")}
       ${dlBtn(L.android, "btn-ghost", "🤖", "Скачать для Android")}
       ${dlBtn(L.mac, "btn-ghost", "🍎", "Скачать для Mac")}
       ${dlBtn(L.windows, "btn-ghost", "🪟", "Скачать для Windows")}
@@ -79,8 +80,9 @@
         </div>
       </div>
       <div class="detail-actions">
+        ${openBtn}
         ${dlGrid}
-        <div class="plat-label">Доступно на iPhone, Android, Mac и Windows</div>
+        <div class="plat-label">Или скачайте на iPhone, Android, Mac и Windows</div>
       </div>
     </section>
     ${authorNote}
