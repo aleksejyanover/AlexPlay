@@ -1,6 +1,26 @@
+import { useRef, useState } from 'react'
 import Tile from '../components/Tile.jsx'
 import AppCard from '../components/AppCard.jsx'
 import { APPS, catEmoji, catHref, fmtNum, stars } from '../utils.js'
+
+const REV_KEY = 'alexplay_reviews'
+
+/* --- localStorage-хелперы (ключи как в эталоне html/js/detail.js) --- */
+function readAllReviews() {
+  try {
+    return JSON.parse(localStorage.getItem(REV_KEY) || '{}')
+  } catch {
+    return {}
+  }
+}
+
+function launchKey(appId) {
+  return 'alexplay_launch_' + appId
+}
+
+function todayStr() {
+  return new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+}
 
 function Shot({ app, shot, index }) {
   return (
@@ -15,10 +35,16 @@ function Shot({ app, shot, index }) {
 }
 
 /* Кнопка одной платформы: пустая ссылка → неактивная с пометкой «Скоро» */
-function DlBtn({ href, variant, icon, label }) {
+function DlBtn({ href, variant, icon, label, onLaunch }) {
   if (href) {
     return (
-      <a className={`btn ${variant}`} href={href} target="_blank" rel="noopener noreferrer">
+      <a
+        className={`btn ${variant}`}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onLaunch}
+      >
         {icon && <span aria-hidden="true">{icon}</span>}
         {label}
       </a>
@@ -32,22 +58,199 @@ function DlBtn({ href, variant, icon, label }) {
   )
 }
 
-/* Сетка загрузки 2×2 из links: { ios, android, mac, windows } */
-function DlGrid({ links }) {
+/* Блок действий: «Открыть в браузере» (links.web) + сетка загрузки 2×2 по платформам.
+   Клик по любой активной кнопке = «первый запуск» → открывает форму отзыва. */
+function DlActions({ links, onLaunch }) {
   return (
-    <>
+    <div className="dl-actions">
+      <DlBtn
+        href={links.web}
+        variant="btn-primary"
+        icon="🌐"
+        label="Открыть в браузере"
+        onLaunch={onLaunch}
+      />
       <div className="dl-grid">
-        <DlBtn href={links.ios} variant="btn-primary" label="Загрузить для iPhone" />
-        <DlBtn href={links.android} variant="btn-outline" icon="🤖" label="Скачать для Android" />
-        <DlBtn href={links.mac} variant="btn-outline" icon="🍎" label="Скачать для Mac" />
-        <DlBtn href={links.windows} variant="btn-outline" icon="🪟" label="Скачать для Windows" />
+        <DlBtn href={links.ios} variant="btn-ghost" label="Загрузить для iPhone" onLaunch={onLaunch} />
+        <DlBtn
+          href={links.android}
+          variant="btn-ghost"
+          icon="🤖"
+          label="Скачать для Android"
+          onLaunch={onLaunch}
+        />
+        <DlBtn href={links.mac} variant="btn-ghost" icon="🍎" label="Скачать для Mac" onLaunch={onLaunch} />
+        <DlBtn
+          href={links.windows}
+          variant="btn-ghost"
+          icon="🪟"
+          label="Скачать для Windows"
+          onLaunch={onLaunch}
+        />
       </div>
-      <div className="plat-label">Доступно на iPhone, Android, Mac и Windows</div>
-    </>
+      <div className="plat-label">Или скачайте на iPhone, Android, Mac и Windows</div>
+    </div>
+  )
+}
+
+/* Один отзыв (свой — с меткой и кнопками «Изменить»/«Удалить») */
+function ReviewItem({ r, yours, onEdit, onDelete }) {
+  const name = (r.name || 'Гость').trim() || 'Гость'
+  const initial = name.charAt(0) || 'Г'
+  return (
+    <div className={`review${yours ? ' yours' : ''}`}>
+      <div className="review-head">
+        <span className="avatar">{initial}</span>
+        <div>
+          <div className="who">
+            {name}
+            {yours && <span className="yours-label">Ваш отзыв</span>}
+          </div>
+          <div className="when">{r.date}</div>
+        </div>
+        <span className="rv-stars">
+          {'★'.repeat(r.stars) + '☆'.repeat(5 - r.stars)}
+        </span>
+      </div>
+      <p>{r.text}</p>
+      {yours && (
+        <div className="rv-actions">
+          <button onClick={onEdit}>Изменить</button>
+          <button className="del" onClick={onDelete}>
+            Удалить
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Блок «Отзывы»: gate → форма → свой отзыв → отзывы из app.comments */
+function Reviews({ app, launched }) {
+  const [mine, setMine] = useState(() => readAllReviews()[app.id] || null)
+  const [editing, setEditing] = useState(false)
+  const [formStars, setFormStars] = useState(5)
+  const [text, setText] = useState('')
+  const [name, setName] = useState('')
+  const textRef = useRef(null)
+  const formRef = useRef(null)
+  const hasAnyLink = Object.values(app.links || {}).some(Boolean)
+
+  function save(e) {
+    e.preventDefault()
+    const t = text.trim()
+    if (!t) {
+      textRef.current?.focus()
+      return
+    }
+    const rec = { stars: formStars, text: t, name: name.trim() || 'Гость', date: todayStr() }
+    const all = readAllReviews()
+    all[app.id] = rec
+    localStorage.setItem(REV_KEY, JSON.stringify(all))
+    setMine(rec)
+    setEditing(false)
+  }
+
+  function startEdit() {
+    setEditing(true)
+    setFormStars(mine.stars)
+    setText(mine.text)
+    setName(mine.name || '')
+    requestAnimationFrame(() =>
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+    )
+  }
+
+  function remove() {
+    const all = readAllReviews()
+    delete all[app.id]
+    localStorage.setItem(REV_KEY, JSON.stringify(all))
+    setMine(null)
+    setEditing(false)
+    setFormStars(5)
+    setText('')
+    setName('')
+  }
+
+  return (
+    <div className="reviews">
+      {!launched && (
+        <div className="review-gate">
+          <span style={{ fontSize: 20 }}>🔒</span>
+          <span>
+            <b>Чтобы оставить отзыв, хотя бы раз откройте приложение.</b>
+            <br />
+            Нажмите «Открыть в браузере» или скачайте его — и форма отзыва станет доступной.
+            {!hasAnyLink && (
+              <>
+                <br />
+                У этого приложения пока нет активных ссылок — отзыв можно будет оставить после его
+                запуска.
+              </>
+            )}
+          </span>
+        </div>
+      )}
+
+      {launched && (!mine || editing) && (
+        <form className="review-form" onSubmit={save} ref={formRef}>
+          <div className="lbl">{editing ? 'Изменить отзыв' : 'Ваша оценка'}</div>
+          <div className="stars-input">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <span
+                key={i}
+                className={`s${i <= formStars ? ' on' : ''}`}
+                onClick={() => setFormStars(i)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          <textarea
+            ref={textRef}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Расскажите, как вам приложение..."
+          />
+          <div className="row">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ваше имя (необязательно)"
+              style={{ maxWidth: 280 }}
+            />
+            <button className="btn btn-primary btn-sm" type="submit">
+              {editing ? 'Сохранить' : 'Оставить отзыв'}
+            </button>
+            {editing && (
+              <button className="btn btn-ghost btn-sm" type="button" onClick={() => setEditing(false)}>
+                Отмена
+              </button>
+            )}
+          </div>
+        </form>
+      )}
+
+      {mine && <ReviewItem r={mine} yours onEdit={startEdit} onDelete={remove} />}
+
+      {(app.comments || []).map((c, i) => (
+        <ReviewItem key={i} r={c} />
+      ))}
+    </div>
   )
 }
 
 export default function AppPage({ app }) {
+  const [launched, setLaunched] = useState(() => !!localStorage.getItem(launchKey(app.id)))
+
+  /* первый запуск приложения (клик по любой активной кнопке блока действий)
+     открывает возможность отзывов — ставим alexplay_launch_<id> как в эталоне */
+  function handleLaunch() {
+    localStorage.setItem(launchKey(app.id), '1')
+    setLaunched(true)
+  }
+
   const similar = APPS.filter(
     (a) => a.id !== app.id && (a.category === app.category || a.tags.some((t) => app.tags.includes(t))),
   ).slice(0, 6)
@@ -70,7 +273,7 @@ export default function AppPage({ app }) {
             {catEmoji(app.category)} {app.category}
           </a>
           <p className="app-price">{app.price}</p>
-          <DlGrid links={app.links || {}} />
+          <DlActions links={app.links || {}} onLaunch={handleLaunch} />
         </div>
       </section>
 
@@ -142,6 +345,12 @@ export default function AppPage({ app }) {
               Версия {app.version} — обновлено {app.updated}. Улучшена производительность, исправлены
               незначительные ошибки.
             </p>
+          </section>
+
+          {/* Отзывы */}
+          <section className="panel">
+            <h2>Отзывы</h2>
+            <Reviews app={app} launched={launched} />
           </section>
         </div>
 

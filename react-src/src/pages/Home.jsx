@@ -94,6 +94,7 @@ export default function Home() {
       </section>
 
       <Section title="Популярные" apps={popular} />
+      <Section title="Платные" apps={APPS.filter((a) => a.price !== 'Бесплатно')} />
       <Section title="Новинки" apps={fresh} />
       <Section title="Топ по рейтингу" apps={topRated} />
 

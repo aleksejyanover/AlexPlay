@@ -12,11 +12,15 @@ export default function AppCard({ app, compact = false }) {
         <div className="card-meta">
           <span className="rating">⭐ {app.rating.toFixed(1)}</span>
           <span className="dot">·</span>
-          <span className="cat">{app.category}</span>
+          {app.price !== 'Бесплатно' ? (
+            <span className="price-tag">{app.price}</span>
+          ) : (
+            <span className="cat">{app.category}</span>
+          )}
           {!compact && (
             <>
               <span className="dot">·</span>
-              <span className="reviews">{fmtNum(app.reviews)}</span>
+              <span className="reviews-cnt">{fmtNum(app.reviews)}</span>
             </>
           )}
         </div>
