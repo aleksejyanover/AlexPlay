@@ -1,0 +1,28 @@
+1:"$Sreact.fragment"
+2:"/AlexPlay/next/_next/static/chunks/36asky75en2tr.js"
+3:I[25954,["$2"],"default"]
+4:I[39756,["$2"],"default"]
+5:I[37457,["$2"],"default"]
+6:I[22016,["$2"],""]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+11:"ViewportBoundary"
+12:I[97367,["$2"],"$11"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+:HL["/AlexPlay/next/_next/static/chunks/3ltolx2d1ozzg.css","style"]
+8:X
+b:X
+b:C
+c:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","div",null,{"className":"doc","children":[["$","h1",null,{"children":"Политика конфиденциальности"}],["$","p",null,{"className":"lead","children":"Последнее обновление: 22 октября 2026 г."}],["$","h2",null,{"children":"Какие данные мы собираем"}],["$","p",null,{"children":["Alex Play — статический каталог приложений. Мы ",["$","b",null,{"children":"не собираем"}]," ","персональные данные, не используем аккаунты и не храним платёжную информацию."]}],["$","h2",null,{"children":"Поиск и аналитика"}],["$","p",null,{"children":"Поиск работает прямо в вашем браузере: запросы никуда не отправляются. Анонимная статистика посещений может собираться хостингом (GitHub Pages) в обезличенном виде."}],["$","h2",null,{"children":"Ссылки на сторонние ресурсы"}],["$","p",null,{"children":"Кнопки загрузки ведут на внешние сайты (App Store, сайты и файлы приложений). Их правила конфиденциальности определяются владельцами этих ресурсов."}],["$","h2",null,{"children":"Контакты"}],["$","p",null,{"children":["Вопросы о данных — через"," ",["$","$L6",null,{"className":"inline","href":"/support/","children":"поддержку"}],"."]}]]}],null,["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":"$@10","v":null,"s":"$8"}}]]
+9:[["children",{"s":"privacy","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L5",null,{}]}]]}],"p":"$@a","v":"$b","s":"$8"},"c":"$Qc"}]]
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/AlexPlay/next/_next/static/chunks/3ltolx2d1ozzg.css","precedence":"next"}],["$","script","script-0",{"src":"/AlexPlay/next/_next/static/chunks/36asky75en2tr.js","async":true}]],["$","html",null,{"lang":"ru","children":["$","body",null,{"children":[["$","$L3",null,{}],["$","main",null,{"className":"container","children":["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L5",null,{}],"notFound":[["$","div",null,{"className":"notfound","children":[["$","span",null,{"className":"notfound-emoji","children":"🫥"}],["$","h1",null,{"children":"404 — Страница не найдена"}],["$","p",null,{"children":"Такой страницы или приложения не существует."}],["$","$L6",null,{"href":"/","className":"btn btn-primary","children":"На главную"}]]}],[]]}]}],["$","footer",null,{"className":"footer","children":["$","div",null,{"className":"footer-inner","children":[["$","div",null,{"children":["© 2026 ",["$","strong",null,{"children":"Alex Play"}]," — магазин приложений для iPhone и Android"]}],["$","nav",null,{"className":"footer-links","children":[["$","$L6",null,{"href":"/about/","children":"О проекте"}],["$","$L6",null,{"href":"/developers/","children":"Разработчикам"}],["$","$L6",null,{"href":"/privacy/","children":"Политика конфиденциальности"}],["$","$L6",null,{"href":"/support/","children":"Поддержка"}]]}]]}]}]]}]}]]}],"p":"$@7","v":null,"s":"$8"},"c":"$Q9"},"h":{"r":["$","$1","h",{"children":[null,["$","$L12",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#0B0F1A"}]]}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Политика конфиденциальности — Alex Play"}],["$","meta","1",{"name":"description","content":"Политика конфиденциальности магазина приложений Alex Play: мы не собираем персональные данные."}]]}]}],null]}],null]}],"p":"$@15","v":null,"s":"$8"}},"a":"$@16","u":"$@17","b":"SLkzqCK1XTyHQsHKpYgAy"}
+f:null
+8:300
+17:true
+8:C
+16:0
+a:"$undefined"
+7:"$undefined"
+15:"$undefined"
+10:"$undefined"

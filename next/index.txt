@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:"/AlexPlay/next/_next/static/chunks/36asky75en2tr.js"
+3:I[25954,["$2"],"default"]
+4:I[39756,["$2"],"default"]
+5:I[37457,["$2"],"default"]
+6:I[22016,["$2"],""]
+8:I[47257,["$2"],"ClientPageRoot"]
+9:"/AlexPlay/next/_next/static/chunks/0fz-_af33oa4l.js"
+a:I[81694,["$2","$9"],"default"]
+d:I[97367,["$2"],"OutletBoundary"]
+e:"$Sreact.suspense"
+10:"ViewportBoundary"
+11:I[97367,["$2"],"$10"]
+13:"MetadataBoundary"
+14:I[97367,["$2"],"$13"]
+16:I[68027,["$2"],"default",1]
+:HL["/AlexPlay/next/_next/static/chunks/3ltolx2d1ozzg.css","style"]
+7:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","$L8",null,{"Component":"$a","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@b","$@c"]}}],[["$","script","script-0",{"src":"/AlexPlay/next/_next/static/chunks/0fz-_af33oa4l.js","async":true,"nonce":"$undefined"}]],["$","$Ld",null,{"children":["$","$e",null,{"name":"Next.MetadataOutlet","children":"$@f"}]}]]}],"p":false,"v":null}}]]
+0:{"P":null,"c":["",""],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/AlexPlay/next/_next/static/chunks/3ltolx2d1ozzg.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/AlexPlay/next/_next/static/chunks/36asky75en2tr.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"ru","children":["$","body",null,{"children":[["$","$L3",null,{}],["$","main",null,{"className":"container","children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"notfound","children":[["$","span",null,{"className":"notfound-emoji","children":"🫥"}],["$","h1",null,{"children":"404 — Страница не найдена"}],["$","p",null,{"children":"Такой страницы или приложения не существует."}],["$","$L6",null,{"href":"/","className":"btn btn-primary","children":"На главную"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","footer",null,{"className":"footer","children":["$","div",null,{"className":"footer-inner","children":[["$","div",null,{"children":["© 2026 ",["$","strong",null,{"children":"Alex Play"}]," — магазин приложений для iPhone и Android"]}],["$","nav",null,{"className":"footer-links","children":[["$","$L6",null,{"href":"/about/","children":"О проекте"}],["$","$L6",null,{"href":"/developers/","children":"Разработчикам"}],["$","$L6",null,{"href":"/privacy/","children":"Политика конфиденциальности"}],["$","$L6",null,{"href":"/support/","children":"Поддержка"}]]}]]}]}]]}]}]]}],"p":false,"v":null},"c":"$Q7"},"h":{"r":["$","$1","h",{"children":[null,["$","$L11",null,{"children":"$L12"}],["$","$L14",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$e",null,{"name":"Next.Metadata","children":"$L15"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$16",[["$","link","0",{"rel":"stylesheet","href":"/AlexPlay/next/_next/static/chunks/3ltolx2d1ozzg.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"SLkzqCK1XTyHQsHKpYgAy"}
+b:{}
+c:"$7:0:1:d:r:props:children:0:props:serverProvidedParams:params"
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#0B0F1A"}]]
+f:null
+15:[["$","title","0",{"children":"Alex Play — магазин приложений"}],["$","meta","1",{"name":"description","content":"Alex Play — кроссплатформенный магазин приложений для iPhone и Android: игры, инструменты, AI, фото и многое другое."}]]
