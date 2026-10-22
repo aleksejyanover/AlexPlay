@@ -32,7 +32,7 @@
         </div>
         <div class="card-foot">
           <span class="rating"><span class="star">★</span>${a.rating.toFixed(1)} <span class="cnt">(${fmt(a.reviews)})</span></span>
-          <span class="cat-tag">${esc(a.category)}</span>
+          ${a.price !== "Бесплатно" ? `<span class="price-tag">${esc(a.price)}</span>` : `<span class="cat-tag">${esc(a.category)}</span>`}
         </div>
       </a>`;
   }
@@ -98,12 +98,14 @@
     const featured = byRating[0];
     const games = APPS.filter(a => a.category === "Игры");
     const apps = APPS.filter(a => a.category !== "Игры");
+    const paid = APPS.filter(a => a.price !== "Бесплатно");
 
     $("#chips").innerHTML = chipsHTML("Все");
     content.innerHTML =
       hero(featured) +
       authorBand() +
       section("Популярные", byReviews.slice(0, 6)) +
+      section("Платные", paid) +
       section("Новинки", byNew.slice(0, 6)) +
       section("Топ по рейтингу", byRating.slice(0, 6)) +
       section("Игры", games.slice(0, 6), "?cat=Игры") +
