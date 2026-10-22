@@ -104,12 +104,12 @@
     content.innerHTML =
       hero(featured) +
       authorBand() +
-      section("Популярные", byReviews.slice(0, 6)) +
+      section("Популярные", byReviews.slice(0, 10)) +
       section("Платные", paid) +
-      section("Новинки", byNew.slice(0, 6)) +
-      section("Топ по рейтингу", byRating.slice(0, 6)) +
-      section("Игры", games.slice(0, 6), "?cat=Игры") +
-      section("Приложения", apps.slice(0, 6), "?cat=Приложения");
+      section("Новинки", byNew.slice(0, 8)) +
+      section("Топ по рейтингу", byRating.slice(0, 8)) +
+      section("Игры", games, "?cat=Игры") +
+      section("Приложения", apps.slice(0, 10), "?cat=Приложения");
   }
 
   function renderCategory(cat) {
