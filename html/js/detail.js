@@ -79,11 +79,7 @@
           <div class="bars">${bars}</div>
         </div>
       </div>
-      <div class="detail-actions">
-        ${openBtn}
-        ${dlGrid}
-        <div class="plat-label">Или скачайте на iPhone, Android, Mac и Windows</div>
-      </div>
+      <div class="detail-actions" id="actions"></div>
     </section>
     ${authorNote}
 
@@ -251,13 +247,167 @@
     }));
   }
 
-  /* первый запуск приложения открывает возможность отзывов */
-  document.querySelectorAll(".detail-actions a.btn").forEach(el => {
-    el.addEventListener("click", () => {
-      localStorage.setItem(LAUNCH_KEY, "1");
-      renderReviews();
-    });
+  /* ---------- Покупка платного приложения (демо-оплата) ---------- */
+  const PAID_KEY = "alexplay_paid_" + app.id;
+  const isPaid = app.price !== "Бесплатно";
+  const isOwned = () => !isPaid || !!localStorage.getItem(PAID_KEY);
+
+  function actionsHTML() {
+    if (!isOwned()) {
+      return `
+        <button class="btn btn-primary" id="buy-btn">💳 Купить за ${esc(app.price)}</button>
+        <div class="plat-label">После покупки откроются кнопки «Открыть в браузере» и загрузки на все платформы</div>`;
+    }
+    return `${isPaid ? `<div class="buy-hint" style="color:var(--green);font-weight:700">✓ Покупка завершена — приложение доступно</div>` : ""}
+      ${openBtn}
+      ${dlGrid}
+      <div class="plat-label">Или скачайте на iPhone, Android, Mac и Windows</div>`;
+  }
+
+  function renderActions() {
+    const box = document.getElementById("actions");
+    if (box) box.innerHTML = actionsHTML();
+  }
+
+  /* делегирование кликов: запуск приложения (отзывы) + покупка */
+  document.getElementById("actions").addEventListener("click", e => {
+    if (e.target.closest("a.btn")) { localStorage.setItem(LAUNCH_KEY, "1"); renderReviews(); }
+    if (e.target.closest("#buy-btn")) openCheckout();
   });
 
+  /* --- демо-оплата --- */
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+  modal.id = "pay-modal";
+  document.body.appendChild(modal);
+
+  const NOTE = "Демо-режим Alex Play: банковские списания не производятся, данные карт никуда не передаются и не сохраняются.";
+  const showErr = k => modal.querySelector("#" + k + "-err")?.classList.add("show");
+  const hideErr = k => modal.querySelector("#" + k + "-err")?.classList.remove("show");
+
+  const luhn = num => {
+    const d = num.replace(/\D/g, "");
+    if (d.length < 13) return false;
+    let sum = 0, alt = false;
+    for (let i = d.length - 1; i >= 0; i--) {
+      let n = +d[i];
+      if (alt) { n *= 2; if (n > 9) n -= 9; }
+      sum += n; alt = !alt;
+    }
+    return sum % 10 === 0;
+  };
+
+  function checkoutHTML() {
+    return `
+      <div class="modal">
+        <div class="modal-hd">
+          <span class="tile tile-64" style="background:linear-gradient(135deg,${app.grad[0]},${app.grad[1]})">${app.emoji}</span>
+          <div>
+            <div class="name">${esc(app.name)}</div>
+            <div class="price">Цена: <b>${esc(app.price)}</b></div>
+          </div>
+          <button class="modal-close" id="pay-close" aria-label="Закрыть">✕</button>
+        </div>
+        <div class="pay-secure">🔒 Безопасная оплата</div>
+        <div class="pay-title">Данные карты</div>
+        <form id="pay-form" novalidate>
+          <div class="field">
+            <label>Номер карты</label>
+            <input id="cc-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19">
+            <div class="field-err" id="cc-num-err">Проверьте номер карты</div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Срок действия</label>
+              <input id="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="ММ/ГГ" maxlength="5">
+              <div class="field-err" id="cc-exp-err">Формат ММ/ГГ</div>
+            </div>
+            <div class="field">
+              <label>CVC</label>
+              <input id="cc-cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="3">
+              <div class="field-err" id="cc-cvc-err">3 цифры</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Имя на карте</label>
+            <input id="cc-name" autocomplete="cc-name" placeholder="IVAN IVANOV" style="letter-spacing:.04em">
+          </div>
+          <button class="pay-btn" type="submit" id="pay-submit">Оплатить ${esc(app.price)}</button>
+        </form>
+        <div class="pay-note">${NOTE}</div>
+      </div>`;
+  }
+
+  function closeCheckout() { modal.classList.remove("open"); modal.innerHTML = ""; }
+
+  function openCheckout() {
+    modal.innerHTML = checkoutHTML();
+    modal.classList.add("open");
+    bindCheckout();
+  }
+
+  function bindCheckout() {
+    modal.querySelector("#pay-close").addEventListener("click", closeCheckout);
+    modal.addEventListener("mousedown", e => { if (e.target === modal) closeCheckout(); });
+
+    const num = modal.querySelector("#cc-num");
+    const exp = modal.querySelector("#cc-exp");
+    const cvc = modal.querySelector("#cc-cvc");
+    const name = modal.querySelector("#cc-name");
+
+    num.addEventListener("input", () => {
+      const v = num.value.replace(/\D/g, "").slice(0, 16);
+      num.value = v.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
+      num.classList.remove("err"); hideErr("cc-num");
+    });
+    exp.addEventListener("input", () => {
+      const v = exp.value.replace(/\D/g, "").slice(0, 4);
+      exp.value = v.length > 2 ? v.slice(0, 2) + "/" + v.slice(2) : v;
+      exp.classList.remove("err"); hideErr("cc-exp");
+    });
+    cvc.addEventListener("input", () => {
+      cvc.value = cvc.value.replace(/\D/g, "").slice(0, 3);
+      cvc.classList.remove("err"); hideErr("cc-cvc");
+    });
+    name.addEventListener("input", () => {
+      name.value = name.value.replace(/[^a-zA-Z\s'-]/g, "").toUpperCase();
+    });
+
+    modal.querySelector("#pay-form").addEventListener("submit", e => {
+      e.preventDefault();
+      let ok = true;
+      if (!luhn(num.value)) { num.classList.add("err"); showErr("cc-num"); ok = false; }
+      if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(exp.value)) { exp.classList.add("err"); showErr("cc-exp"); ok = false; }
+      if (!/^\d{3}$/.test(cvc.value)) { cvc.classList.add("err"); showErr("cc-cvc"); ok = false; }
+      if (!name.value.trim()) { name.classList.add("err"); ok = false; }
+      if (!ok) return;
+
+      const btn = modal.querySelector("#pay-submit");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span> Обработка платежа...`;
+      setTimeout(() => {
+        localStorage.setItem(PAID_KEY, "1");
+        /* данные карты существуют только в полях формы и удаляются вместе с ней */
+        modal.innerHTML = `
+          <div class="modal">
+            <div class="pay-success">
+              <div class="ok">✓</div>
+              <h3>Покупка завершена</h3>
+              <p>«${esc(app.name)}» добавлено в вашу библиотеку.<br>Теперь приложение можно открыть и скачать на любое устройство.</p>
+            </div>
+            <button class="pay-btn" id="pay-done" style="margin-top:20px">Открыть приложение</button>
+            <div class="pay-note">${NOTE}</div>
+          </div>`;
+        modal.querySelector("#pay-done").addEventListener("click", () => { closeCheckout(); renderActions(); });
+        renderActions();
+      }, 1400);
+    });
+  }
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && modal.classList.contains("open")) closeCheckout();
+  });
+
+  renderActions();
   renderReviews();
 })();
