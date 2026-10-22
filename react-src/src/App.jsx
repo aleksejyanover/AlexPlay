@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
+import MobileNav from './components/MobileNav.jsx'
 import Home from './pages/Home.jsx'
 import AppPage from './pages/AppPage.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
@@ -74,6 +75,7 @@ export default function App() {
       <Header query={query} onQueryChange={onQueryChange} />
       <main className="container main">{page}</main>
       <Footer />
+      <MobileNav />
     </div>
   )
 }

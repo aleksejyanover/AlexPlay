@@ -1449,8 +1449,91 @@ h3 {
   text-decoration: underline;
 }
 
+/* ===== Мобильная нижняя навигация (только телефон) — эталон html/css/style.css ===== */
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mobile-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    background: rgba(13, 17, 30, 0.96);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10.5px;
+    color: var(--muted);
+    padding: 6px 2px;
+    border-radius: 12px;
+    text-align: center;
+    min-height: 48px;
+    justify-content: center;
+    transition: 0.2s;
+  }
+
+  .mobile-nav a .ico {
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  .mobile-nav a.on {
+    color: var(--text);
+  }
+
+  .mobile-nav a.on .ico {
+    filter: drop-shadow(0 0 8px rgba(124, 92, 255, 0.8));
+  }
+
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer {
+    margin-top: 46px;
+  }
+}
+
 /* ===== Адаптивность ===== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .nav {
+    display: none;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .app-head {
+    flex-direction: column;
+  }
+
+  .dl-actions {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  /* шапка в столбик, поиск на всю ширину */
+  .container {
+    padding: 0 14px;
+  }
+
   .header-inner {
     flex-wrap: wrap;
     height: auto;
@@ -1464,60 +1547,318 @@ h3 {
     flex-basis: 100%;
   }
 
+  .search input {
+    height: 44px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .logo-tile {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
   .nav {
     margin-left: auto;
   }
 
+  /* карточки: ровно две колонки minmax(0,1fr) — без горизонтального переполнения */
+  .grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .card {
+    padding: 11px;
+    border-radius: 14px;
+    min-width: 0;
+  }
+
+  .card-title,
+  .card-dev {
+    overflow-wrap: anywhere;
+  }
+
+  .card-meta {
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .cat,
+  .price-tag {
+    font-size: 10.5px;
+    padding: 3px 8px;
+  }
+
+  .card .badge-author {
+    font-size: 9px;
+    padding: 2px 7px;
+    top: 7px;
+    right: 7px;
+  }
+
+  /* компактные плитки (размер задаётся инлайном в React — переопределяем important) */
+  .card .tile {
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 23px !important;
+    border-radius: 12px !important;
+  }
+
+  .carousel .card {
+    flex-basis: 172px;
+  }
+
+  /* hero */
+  .hero {
+    border-radius: 18px;
+  }
+
   .hero-content {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 24px;
-    gap: 18px;
+    padding: 22px 18px;
+    gap: 16px;
   }
 
   .hero-title {
     font-size: 24px;
   }
 
+  .hero-desc {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+
+  .hero-actions {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-head h2 {
+    font-size: 17.5px;
+  }
+
+  /* чипсы */
+  .chips {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .chip {
+    padding: 7px 13px;
+    font-size: 12.5px;
+  }
+
+  /* авторская секция */
+  .author-band {
+    padding: 18px 14px;
+    border-radius: 18px;
+  }
+
+  .author-band-hd {
+    gap: 11px;
+  }
+
+  .author-photo {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    border-radius: 14px;
+  }
+
+  .author-band-hd .t {
+    font-size: 17px;
+  }
+
+  .author-seal {
+    margin-left: 0;
+    font-size: 11px;
+    padding: 6px 11px;
+  }
+
+  /* страница приложения */
+  .back-link {
+    margin: 16px 0 12px;
+    font-size: 13.5px;
+  }
+
   .app-head {
-    flex-direction: column;
-    padding: 20px;
+    padding: 16px;
+    gap: 16px;
+    border-radius: 18px;
+  }
+
+  .app-head .tile {
+    width: 84px !important;
+    height: 84px !important;
+    font-size: 42px !important;
+    border-radius: 20px !important;
   }
 
   .app-title {
-    font-size: 22px;
+    font-size: 20px;
+  }
+
+  .app-columns {
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .panel {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel h2 {
+    font-size: 17.5px;
   }
 
   .rating-flex {
-    gap: 18px;
+    gap: 16px;
+  }
+
+  .rating-big {
+    font-size: 34px;
+  }
+
+  .hist {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .dl-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .dl-actions .btn {
+    width: 100%;
+    font-size: 14.5px;
+  }
+
+  .author-note {
+    font-size: 13px;
+    padding: 11px 13px;
+  }
+
+  .shots {
+    flex-basis: 148px;
+    gap: 10px;
+  }
+
+  .shot {
+    border-radius: 14px;
+  }
+
+  .desc-text {
+    font-size: 14.5px;
+  }
+
+  /* отзывы */
+  .review-form {
+    padding: 14px;
+  }
+
+  .review-form .row {
+    gap: 8px;
+  }
+
+  .review-form .row input[type='text'] {
+    max-width: 100% !important;
+  }
+
+  .review-form .row .btn {
+    flex: 1 1 auto;
+  }
+
+  .stars-input {
+    font-size: 24px;
+  }
+
+  .review {
+    padding: 13px 14px;
+  }
+
+  /* модалка оплаты — bottom-sheet снизу */
+  .modal-overlay {
+    padding: 10px;
+    align-items: end;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    max-height: 94vh;
+  }
+
+  .field input {
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .pay-btn {
+    height: 50px;
+  }
+
+  /* инфо-страницы и футер */
+  .doc {
+    margin-top: 22px;
+  }
+
+  .doc p,
+  .doc li {
+    font-size: 14.5px;
+  }
+
+  .footer {
+    padding: 24px 0;
   }
 
   .footer-inner {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
+  }
+
+  .footer-links {
+    gap: 14px;
+    font-size: 13px;
   }
 }
 
-@media (max-width: 640px) {
-  .container {
-    padding: 0 14px;
+@media (max-width: 380px) {
+  .grid-cards {
+    gap: 8px;
   }
 
-  .carousel .card {
-    flex-basis: 210px;
+  .card {
+    padding: 9px;
   }
 
-  .author-band {
-    padding: 20px;
+  .card .tile {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 20px !important;
   }
 
-  .author-seal {
-    margin-left: 0;
+  .card-title {
+    font-size: 12px;
   }
-}
 
-@media (max-width: 420px) {
-  .dl-grid {
-    grid-template-columns: 1fr;
+  .shots {
+    flex-basis: 132px;
   }
 }
