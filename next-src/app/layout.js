@@ -1,6 +1,7 @@
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MobileNav from '@/components/MobileNav';
 
 export const metadata = {
   title: 'Alex Play — магазин приложений',
@@ -11,6 +12,7 @@ export const metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
   themeColor: '#0B0F1A',
 };
 
@@ -21,6 +23,7 @@ export default function RootLayout({ children }) {
         <Header />
         <main className="container">{children}</main>
         <Footer />
+        <MobileNav />
       </body>
     </html>
   );

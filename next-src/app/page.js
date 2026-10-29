@@ -1,7 +1,14 @@
 'use client';
 
 import { useSyncExternalStore, useMemo, useEffect } from 'react';
-import { subscribe, getQuery, setQuery } from '@/lib/search-store';
+import {
+  subscribe,
+  getQuery,
+  setQuery,
+  subscribeCat,
+  getCat,
+  setCat,
+} from '@/lib/search-store';
 import {
   ALL_APPS,
   CATEGORIES,
@@ -12,7 +19,6 @@ import {
 import AppCard from '@/components/AppCard';
 import Section from '@/components/Section';
 import Tile from '@/components/Tile';
-import { useState } from 'react';
 import Link from 'next/link';
 
 const SECTIONS = [
@@ -44,12 +50,16 @@ const AUTHOR_APPS = ALL_APPS.filter((a) => a.author);
 
 export default function HomePage() {
   const query = useSyncExternalStore(subscribe, getQuery, getQuery);
-  const [cat, setCat] = useState('Все');
+  const cat = useSyncExternalStore(subscribeCat, getCat, getCat);
 
-  // Поддержка прямых ссылок вида /?q=слово (и Enter из поиска на любых страницах).
+  // Поддержка прямых ссылок вида /?q=слово и /?cat=Игры (и Enter из поиска,
+  // и клики по мобильному навбару на любых страницах).
   useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get('q');
+    const p = new URLSearchParams(window.location.search);
+    const q = p.get('q');
     if (q) setQuery(q);
+    const c = p.get('cat');
+    if (c && ['Все', ...CATEGORIES].includes(c)) setCat(c);
   }, []);
 
   const filtering = query.trim() !== '' || cat !== 'Все';
@@ -149,7 +159,15 @@ export default function HomePage() {
                 role="tab"
                 aria-selected={cat === c}
                 className={`chip${cat === c ? ' active' : ''}`}
-                onClick={() => setCat(c)}
+                onClick={() => {
+                  setCat(c);
+                  // Чипс категории меняет URL (прямая ссылка/обновление страницы).
+                  history.replaceState(
+                    null,
+                    '',
+                    c === 'Все' ? location.pathname : `?cat=${encodeURIComponent(c)}`
+                  );
+                }}
               >
                 {c}
               </button>
