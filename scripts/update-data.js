@@ -111,6 +111,6 @@ const rest = apps.filter(a => !author.some(n => n.id === a.id));
 const merged = [...author, ...rest];
 
 fs.writeFileSync(P, JSON.stringify(merged, null, 2) + "\n");
-fs.writeFileSync("/Users/alexey/alexplay/html/js/data.js",
+fs.writeFileSync("/Users/alexey/alexplay/js/data.js",
   "/* Сгенерировано из shared/apps.json */\nwindow.APPS = " + JSON.stringify(merged, null, 2) + ";\n");
 console.log("apps:", merged.length, "| автор:", merged.filter(a => a.author).length);

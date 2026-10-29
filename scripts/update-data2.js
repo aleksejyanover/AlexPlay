@@ -92,6 +92,6 @@ for (const a of apps) {
 }
 
 fs.writeFileSync(P, JSON.stringify(apps, null, 2) + "\n");
-fs.writeFileSync("/Users/alexey/alexplay/html/js/data.js",
+fs.writeFileSync("/Users/alexey/alexplay/js/data.js",
   "/* Сгенерировано из shared/apps.json */\nwindow.APPS = " + JSON.stringify(apps, null, 2) + ";\n");
 console.log("ok:", apps.length, "| платные:", apps.filter(a => a.price !== "Бесплатно").map(a => `${a.id}=${a.price}`).join(", "));

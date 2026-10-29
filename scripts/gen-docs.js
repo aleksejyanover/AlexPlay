@@ -1,6 +1,6 @@
 /* Генерация информационных страниц Alex Play (html-вариант) */
 const fs = require("fs");
-const D = "/Users/alexey/alexplay/html/";
+const D = "/Users/alexey/alexplay/";
 
 const shell = (title, body) => `<!DOCTYPE html>
 <html lang="ru">

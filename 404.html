@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0F1A">
+  <title>Страница переехала — Alex Play</title>
+  <style>
+    :root { --bg:#0B0F1A; --text:#EAEFFA; --muted:#8A94AD; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background:var(--bg); color:var(--text); min-height:100vh;
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:40px 20px; text-align:center;
+    }
+    .mark { width:56px; height:56px; border-radius:16px; font-size:26px; color:#fff;
+      background:linear-gradient(135deg,#7C5CFF,#00D2FF); display:grid; place-items:center;
+      box-shadow:0 8px 24px rgba(124,92,255,.5); margin-bottom:18px; }
+    h1 { font-size:22px; margin-bottom:10px; }
+    p { color:var(--muted); font-size:15px; margin-bottom:22px; max-width:440px; line-height:1.6; }
+    a.go { display:inline-block; padding:13px 26px; border-radius:14px; font-weight:700;
+      color:#fff; text-decoration:none; background:linear-gradient(90deg,#7C5CFF,#00D2FF); }
+    a.go:hover { filter:brightness(1.1); }
+  </style>
+</head>
+<body>
+  <div class="mark">▶</div>
+  <h1>Страница переехала</h1>
+  <p>Мы собрали весь магазин в одном месте. Сейчас перенаправим вас на главную…</p>
+  <a class="go" href="./" id="home">Перейти на главную</a>
+
+  <script>
+    // Старые адреса вариантов сайта (/html/..., /react/..., /next/...)
+    // редиректятся на новые: HTML-версия теперь живёт в корне сайта.
+    (function () {
+      var path = location.pathname;
+      var variants = ['/html', '/react', '/next'];
+      var url = null;
+
+      for (var i = 0; i < variants.length; i++) {
+        var idx = path.indexOf(variants[i]);
+        // совпадение только по целому сегменту пути: /AlexPlay/html/... или /AlexPlay/html
+        if (idx === -1) continue;
+        var after = path.charAt(idx + variants[i].length);
+        if (after && after !== '/') continue;
+
+        var prefix = path.slice(0, idx);            // напр. /AlexPlay
+        var rest = path.slice(idx + variants[i].length + 1); // путь после варианта
+
+        if (variants[i] === '/html') {
+          // страницы HTML-версии совпали с корневыми — переносим без потери query/Hash
+          url = prefix + '/' + rest + location.search + location.hash;
+        } else {
+          // у других вариантов свои маршруты — отправляем на главную
+          url = prefix + '/' + location.search;
+        }
+        break;
+      }
+
+      if (!url) {
+        // любая другая несуществующая страница — на главную сайта
+        var seg = path.split('/');
+        var root = seg.length > 2 ? '/' + seg[1] + '/' : '/';
+        url = location.origin + root;
+      }
+
+      document.getElementById('home').href = url;
+      location.replace(url);
+    })();
+  </script>
+</body>
+</html>
