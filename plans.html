@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0F1A">
+  <title>Тарифы VIP и Premium — Alex Play</title>
+  <meta name="description" content="VIP-клуб Alex Play: со скидкой на игры и ранним доступом. Тарифы VIP и Premium.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%237C5CFF'/><text x='50' y='68' font-size='52' text-anchor='middle'>▶</text></svg>">
+</head>
+<body>
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">▶</span>
+        <span><b>Alex</b> Play</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Главная</a>
+        <a href="index.html?cat=Игры">Игры</a>
+        <a href="index.html?cat=Приложения">Приложения</a>
+        <a href="plans.html" id="nav-plans" class="on">⭐ Тарифы</a>
+      </nav>
+      <div class="search">
+        <span class="ico">🔍</span>
+        <input id="q" type="search" placeholder="Найти приложение или игру" autocomplete="off">
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap doc">
+    <h1>VIP-клуб Alex Play</h1>
+    <p class="lead">Подписки с привилегиями: игры выходят первыми, скидки на покупки и немного больше возможностей.</p>
+
+    <div class="plan-status" id="plan-status"></div>
+
+    <div class="plans">
+      <div class="plan" data-plan-card="vip">
+        <div class="plan-hd">
+          <span class="plan-ico">⭐</span>
+          <div>
+            <div class="plan-name">VIP</div>
+            <div class="plan-sub">Для любителей игр</div>
+          </div>
+        </div>
+        <div class="plan-price"><b>299 ₽</b><span>/мес</span></div>
+        <ul class="plan-perks">
+          <li><span class="ok">✓</span>Игры выходят первыми на главной</li>
+          <li><span class="ok">✓</span>Скидка <b>40%</b> на все игры</li>
+          <li><span class="ok">✓</span>Ранний доступ к играм (предзаказ)</li>
+          <li class="no"><span class="x">✕</span>Скидка на приложения</li>
+          <li class="no"><span class="x">✕</span>Значок в отзывах и приоритетная поддержка</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" data-plan="vip">Оформить VIP — 299 ₽/мес</button>
+      </div>
+
+      <div class="plan hot">
+        <span class="plan-ribbon">Выгоднее</span>
+        <div class="plan-hd">
+          <span class="plan-ico">👑</span>
+          <div>
+            <div class="plan-name">Premium</div>
+            <div class="plan-sub">Всё из VIP и немного больше</div>
+          </div>
+        </div>
+        <div class="plan-price"><b>499 ₽</b><span>/мес</span></div>
+        <ul class="plan-perks">
+          <li><span class="ok">✓</span>Игры выходят первыми на главной</li>
+          <li><span class="ok">✓</span>Скидка <b>40%</b> на все игры</li>
+          <li><span class="ok">✓</span>Ранний доступ к играм (предзаказ)</li>
+          <li><span class="ok">✓</span>Скидка <b>20%</b> на приложения</li>
+          <li><span class="ok">✓</span>Новинки показываются первыми</li>
+          <li><span class="ok">✓</span>👑 Значок в отзывах</li>
+          <li><span class="ok">✓</span>Приоритетная поддержка</li>
+        </ul>
+        <button class="btn btn-primary plan-btn" data-plan="premium">Оформить Premium — 499 ₽/мес</button>
+      </div>
+    </div>
+
+    <div class="plan-note">
+      <b>Как это работает:</b> подписка активируется на 30 дней и действует в этом браузере.
+      Оплата — <b>демо-режим</b>: банковские списания не производятся, данные карт никуда не передаются.
+      Подписку можно оформить только после входа в аккаунт.
+    </div>
+
+    <p>Вопросы — на <a class="inline" href="support.html">странице поддержки</a> или вернитесь
+      <a class="inline" href="index.html">в каталог</a>.</p>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <a class="logo" href="index.html" style="margin-bottom:10px">
+          <span class="logo-mark">▶</span>
+          <span><b>Alex</b> Play</span>
+        </a>
+        <div class="copy">Приложения для iPhone и Android</div>
+      </div>
+      <div class="foot-links">
+        <a href="about.html">О проекте</a>
+        <a href="developers.html">Разработчикам</a>
+        <a href="plans.html">Подписки</a>
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="support.html">Поддержка</a>
+      </div>
+      <div class="copy">© 2026 Alex Play</div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/pay.js"></script>
+  <script>
+    (function () {
+      const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      const statusBox = document.getElementById("plan-status");
+
+      const q = document.getElementById("q");
+      q.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && this.value.trim())
+          location.href = "index.html?q=" + encodeURIComponent(this.value.trim());
+      });
+
+      function buy(plan) {
+        if (!AP.user()) {
+          AP.openAuth("login", () => buy(plan)); /* после входа продолжить оформление */
+          return;
+        }
+        const p = AP.PLANS[plan];
+        APCheckout.open({
+          emoji: p.emoji,
+          grad: p.grad,
+          name: p.name + "-подписка",
+          subLabel: "Стоимость в месяц",
+          priceText: p.price + " ₽/мес",
+          successTitle: "Подписка оформлена",
+          successText: p.name + " активирована на 30 дней.<br>Привилегии уже действуют в каталоге.",
+          doneLabel: "Перейти в каталог",
+          onSuccess: () => AP.setTier(plan),
+          onDone: () => { location.href = "index.html"; }
+        });
+      }
+
+      function refresh() {
+        const t = AP.tier();
+        const name = AP.user();
+
+        if (t === "admin") {
+          statusBox.className = "plan-status admin";
+          statusBox.innerHTML = "🛡 Главный аккаунт <b>ALEX</b> — всё в магазине бесплатно, включены все привилегии Premium. " +
+            '<a class="inline" href="index.html">В каталог →</a>';
+        } else if (t === "vip" || t === "premium") {
+          const p = AP.PLANS[t];
+          const d = new Date(AP.untilDate()).toLocaleDateString("ru-RU");
+          statusBox.className = "plan-status " + t;
+          statusBox.innerHTML = p.emoji + " Подписка <b>" + p.name + "</b> активна до <b>" + d + "</b>. " +
+            'Скидки и порядок секций уже применяются. <a class="inline" href="index.html">В каталог →</a>';
+        } else if (name) {
+          statusBox.className = "plan-status";
+          statusBox.innerHTML = "👤 Аккаунт <b>" + esc(name) + "</b> — подписка не оформлена. Выберите тариф ниже.";
+        } else {
+          statusBox.className = "plan-status";
+          statusBox.innerHTML = 'Чтобы оформить подписку, <button class="link-btn" id="do-login">войдите или зарегистрируйтесь</button> — это займёт минуту.';
+          document.getElementById("do-login").addEventListener("click", () => AP.openAuth("login"));
+        }
+
+        document.querySelectorAll(".plan-btn").forEach(b => {
+          const plan = b.dataset.plan;
+          const p = AP.PLANS[plan];
+          const active = AP.tier() === plan;
+          b.textContent = active ? "✓ Тариф подключён" : "Оформить " + p.name + " — " + p.price + " ₽/мес";
+          b.disabled = active;
+          b.onclick = () => buy(plan);
+        });
+      }
+
+      window.addEventListener("ap:auth", refresh);
+      refresh();
+    })();
+  </script>
+
+  <nav class="mobile-nav">
+    <a href="index.html"><span class="ico">🏠</span>Главная</a>
+    <a href="index.html?cat=Игры"><span class="ico">🎮</span>Игры</a>
+    <a href="index.html?cat=Приложения"><span class="ico">🧰</span>Приложения</a>
+    <a href="index.html"><span class="ico">🔍</span>Поиск</a>
+  </nav>
+</body>
+</html>

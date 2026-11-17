@@ -10,6 +10,23 @@
   const app = APPS.find(a => a.id === id);
   const root = $("#detail");
 
+  /* цена с учётом тарифа (VIP/Premium/админ) */
+  const P = app ? AP.priceFor(app) : null;
+
+  function priceMeta() {
+    if (P.free) return `🎁 даром <span class="was">аккаунт ALEX</span>`;
+    if (P.old) return `${esc(P.now)} <span class="was">было ${esc(P.old)}</span>`;
+    return esc(app.price);
+  }
+
+  function priceTag(a) {
+    if (a.price === "Бесплатно") return `<span class="cat-tag">${esc(a.category)}</span>`;
+    const p = AP.priceFor(a);
+    if (p.free) return `<span class="price-tag free">🎁 даром</span>`;
+    if (p.old) return `<span class="price-tag disc"><s>${esc(p.old)}</s>${esc(p.now)}</span>`;
+    return `<span class="price-tag">${esc(a.price)}</span>`;
+  }
+
   /* поиск в header всегда ведёт на главную */
   const q = $("#q");
   q.addEventListener("keydown", e => {
@@ -89,7 +106,7 @@
       <div class="meta-item"><div class="k">Возраст</div><div class="v">${esc(app.age)}</div></div>
       <div class="meta-item"><div class="k">Версия</div><div class="v">${esc(app.version)}</div></div>
       <div class="meta-item"><div class="k">Обновлено</div><div class="v">${esc(app.updated)}</div></div>
-      <div class="meta-item"><div class="k">Цена</div><div class="v">${esc(app.price)}</div></div>
+      <div class="meta-item"><div class="k">Цена</div><div class="v">${priceMeta()}</div></div>
     </div>
 
     <section class="block">
@@ -134,7 +151,7 @@
             </div>
             <div class="card-foot">
               <span class="rating"><span class="star">★</span>${a.rating.toFixed(1)} <span class="cnt">(${fmt(a.reviews)})</span></span>
-              ${a.price !== "Бесплатно" ? `<span class="price-tag">${esc(a.price)}</span>` : `<span class="cat-tag">${esc(a.category)}</span>`}
+              ${priceTag(a)}
             </div>
           </a>`).join("")}
       </div>
@@ -156,12 +173,13 @@
   const starsStr = n => "★".repeat(n) + "☆".repeat(5 - n);
 
   function reviewHTML(r, yours) {
+    const b = AP.badgeByName(r.name);
     return `
       <div class="review${yours ? " yours" : ""}">
         <div class="review-head">
           <span class="avatar">${esc((r.name || "Гость").trim().charAt(0) || "Г")}</span>
           <div>
-            <div class="who">${esc(r.name || "Гость")}${yours ? ` <span class="yours-label">Ваш отзыв</span>` : ""}</div>
+            <div class="who">${esc(r.name || "Гость")}${b ? ` <span class="tier-badge ${b.cls}">${b.text}</span>` : ""}${yours ? ` <span class="yours-label">Ваш отзыв</span>` : ""}</div>
             <div class="when">${esc(r.date)}</div>
           </div>
           <span class="rv-stars">${starsStr(r.stars)}</span>
@@ -250,15 +268,29 @@
   /* ---------- Покупка платного приложения (демо-оплата) ---------- */
   const PAID_KEY = "alexplay_paid_" + app.id;
   const isPaid = app.price !== "Бесплатно";
-  const isOwned = () => !isPaid || !!localStorage.getItem(PAID_KEY);
+  const isOwned = () => AP.tier() === "admin" || !isPaid || !!localStorage.getItem(PAID_KEY);
+
+  const discNote = () => {
+    if (!P.old) return "";
+    const t = AP.tier();
+    return `<div class="disc-note">Скидка ${t === "vip" ? "VIP" : "Premium"}: <s>${esc(P.old)}</s> <b>${esc(P.now)}</b></div>`;
+  };
 
   function actionsHTML() {
+    if (AP.tier() === "admin" && isPaid) {
+      return `<div class="buy-hint free-hint">🎁 Всё бесплатно — главный аккаунт ALEX</div>
+        ${openBtn}
+        ${dlGrid}
+        <div class="plat-label">Или скачайте на iPhone, Android, Mac и Windows</div>`;
+    }
     if (!isOwned()) {
       return `
-        <button class="btn btn-primary" id="buy-btn">💳 Купить за ${esc(app.price)}</button>
+        <button class="btn btn-primary" id="buy-btn">💳 Купить за ${esc(P.label)}</button>
+        ${discNote()}
         <div class="plat-label">После покупки откроются кнопки «Открыть в браузере» и загрузки на все платформы</div>`;
     }
-    return `${isPaid ? `<div class="buy-hint" style="color:var(--green);font-weight:700">✓ Покупка завершена — приложение доступно</div>` : ""}
+    return `${isPaid ? `<div class="buy-hint">✓ Покупка завершена — приложение доступно</div>` : ""}
+      ${discNote()}
       ${openBtn}
       ${dlGrid}
       <div class="plat-label">Или скачайте на iPhone, Android, Mac и Windows</div>`;
@@ -275,139 +307,25 @@
     if (e.target.closest("#buy-btn")) openCheckout();
   });
 
-  /* --- демо-оплата --- */
-  const modal = document.createElement("div");
-  modal.className = "modal-overlay";
-  modal.id = "pay-modal";
-  document.body.appendChild(modal);
-
-  const NOTE = "Демо-режим Alex Play: банковские списания не производятся, данные карт никуда не передаются и не сохраняются.";
-  const showErr = k => modal.querySelector("#" + k + "-err")?.classList.add("show");
-  const hideErr = k => modal.querySelector("#" + k + "-err")?.classList.remove("show");
-
-  const luhn = num => {
-    const d = num.replace(/\D/g, "");
-    if (d.length < 13) return false;
-    let sum = 0, alt = false;
-    for (let i = d.length - 1; i >= 0; i--) {
-      let n = +d[i];
-      if (alt) { n *= 2; if (n > 9) n -= 9; }
-      sum += n; alt = !alt;
-    }
-    return sum % 10 === 0;
-  };
-
-  function checkoutHTML() {
-    return `
-      <div class="modal">
-        <div class="modal-hd">
-          <span class="tile tile-64" style="background:linear-gradient(135deg,${app.grad[0]},${app.grad[1]})">${app.emoji}</span>
-          <div>
-            <div class="name">${esc(app.name)}</div>
-            <div class="price">Цена: <b>${esc(app.price)}</b></div>
-          </div>
-          <button class="modal-close" id="pay-close" aria-label="Закрыть">✕</button>
-        </div>
-        <div class="pay-secure">🔒 Безопасная оплата</div>
-        <div class="pay-title">Данные карты</div>
-        <form id="pay-form" novalidate>
-          <div class="field">
-            <label>Номер карты</label>
-            <input id="cc-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19">
-            <div class="field-err" id="cc-num-err">Проверьте номер карты</div>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label>Срок действия</label>
-              <input id="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="ММ/ГГ" maxlength="5">
-              <div class="field-err" id="cc-exp-err">Формат ММ/ГГ</div>
-            </div>
-            <div class="field">
-              <label>CVC</label>
-              <input id="cc-cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="3">
-              <div class="field-err" id="cc-cvc-err">3 цифры</div>
-            </div>
-          </div>
-          <div class="field">
-            <label>Имя на карте</label>
-            <input id="cc-name" autocomplete="cc-name" placeholder="IVAN IVANOV" style="letter-spacing:.04em">
-          </div>
-          <button class="pay-btn" type="submit" id="pay-submit">Оплатить ${esc(app.price)}</button>
-        </form>
-        <div class="pay-note">${NOTE}</div>
-      </div>`;
-  }
-
-  function closeCheckout() { modal.classList.remove("open"); modal.innerHTML = ""; }
-
+  /* --- демо-оплата (общий модуль js/pay.js) --- */
   function openCheckout() {
-    modal.innerHTML = checkoutHTML();
-    modal.classList.add("open");
-    bindCheckout();
-  }
-
-  function bindCheckout() {
-    modal.querySelector("#pay-close").addEventListener("click", closeCheckout);
-    modal.addEventListener("mousedown", e => { if (e.target === modal) closeCheckout(); });
-
-    const num = modal.querySelector("#cc-num");
-    const exp = modal.querySelector("#cc-exp");
-    const cvc = modal.querySelector("#cc-cvc");
-    const name = modal.querySelector("#cc-name");
-
-    num.addEventListener("input", () => {
-      const v = num.value.replace(/\D/g, "").slice(0, 16);
-      num.value = v.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
-      num.classList.remove("err"); hideErr("cc-num");
-    });
-    exp.addEventListener("input", () => {
-      const v = exp.value.replace(/\D/g, "").slice(0, 4);
-      exp.value = v.length > 2 ? v.slice(0, 2) + "/" + v.slice(2) : v;
-      exp.classList.remove("err"); hideErr("cc-exp");
-    });
-    cvc.addEventListener("input", () => {
-      cvc.value = cvc.value.replace(/\D/g, "").slice(0, 3);
-      cvc.classList.remove("err"); hideErr("cc-cvc");
-    });
-    name.addEventListener("input", () => {
-      name.value = name.value.replace(/[^a-zA-Z\s'-]/g, "").toUpperCase();
-    });
-
-    modal.querySelector("#pay-form").addEventListener("submit", e => {
-      e.preventDefault();
-      let ok = true;
-      if (!luhn(num.value)) { num.classList.add("err"); showErr("cc-num"); ok = false; }
-      if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(exp.value)) { exp.classList.add("err"); showErr("cc-exp"); ok = false; }
-      if (!/^\d{3}$/.test(cvc.value)) { cvc.classList.add("err"); showErr("cc-cvc"); ok = false; }
-      if (!name.value.trim()) { name.classList.add("err"); ok = false; }
-      if (!ok) return;
-
-      const btn = modal.querySelector("#pay-submit");
-      btn.disabled = true;
-      btn.innerHTML = `<span class="spinner"></span> Обработка платежа...`;
-      setTimeout(() => {
-        localStorage.setItem(PAID_KEY, "1");
-        /* данные карты существуют только в полях формы и удаляются вместе с ней */
-        modal.innerHTML = `
-          <div class="modal">
-            <div class="pay-success">
-              <div class="ok">✓</div>
-              <h3>Покупка завершена</h3>
-              <p>«${esc(app.name)}» добавлено в вашу библиотеку.<br>Теперь приложение можно открыть и скачать на любое устройство.</p>
-            </div>
-            <button class="pay-btn" id="pay-done" style="margin-top:20px">Открыть приложение</button>
-            <div class="pay-note">${NOTE}</div>
-          </div>`;
-        modal.querySelector("#pay-done").addEventListener("click", () => { closeCheckout(); renderActions(); });
-        renderActions();
-      }, 1400);
+    const t = AP.tier();
+    APCheckout.open({
+      emoji: app.emoji,
+      grad: app.grad,
+      name: app.name,
+      priceText: P.label,
+      badge: P.old ? { cls: t, text: AP.tierEmoji(t) + " " + AP.tierLabel(t) } : null,
+      successText: `«${esc(app.name)}» добавлено в вашу библиотеку.<br>Теперь приложение можно открыть и скачать на любое устройство.`,
+      doneLabel: "Открыть приложение",
+      onSuccess: () => { localStorage.setItem(PAID_KEY, "1"); renderActions(); },
+      onDone: () => renderActions()
     });
   }
-
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && modal.classList.contains("open")) closeCheckout();
-  });
 
   renderActions();
   renderReviews();
+
+  /* смена аккаунта или тарифа — перерисовать кнопки и значки */
+  window.addEventListener("ap:auth", () => { renderActions(); renderReviews(); });
 })();

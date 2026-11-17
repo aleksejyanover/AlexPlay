@@ -19,6 +19,15 @@
     return "★★★★★".slice(0, Math.round(r)) + "☆☆☆☆☆".slice(0, 5 - Math.round(r));
   }
 
+  /* цена с учётом тарифа (VIP/Premium/админ) */
+  function priceTag(a) {
+    if (a.price === "Бесплатно") return `<span class="cat-tag">${esc(a.category)}</span>`;
+    const p = AP.priceFor(a);
+    if (p.free) return `<span class="price-tag free">🎁 даром</span>`;
+    if (p.old) return `<span class="price-tag disc"><s>${esc(p.old)}</s>${esc(p.now)}</span>`;
+    return `<span class="price-tag">${esc(a.price)}</span>`;
+  }
+
   function card(a) {
     return `
       <a class="card" href="app.html?id=${encodeURIComponent(a.id)}">
@@ -32,7 +41,7 @@
         </div>
         <div class="card-foot">
           <span class="rating"><span class="star">★</span>${a.rating.toFixed(1)} <span class="cnt">(${fmt(a.reviews)})</span></span>
-          ${a.price !== "Бесплатно" ? `<span class="price-tag">${esc(a.price)}</span>` : `<span class="cat-tag">${esc(a.category)}</span>`}
+          ${priceTag(a)}
         </div>
       </a>`;
   }
@@ -91,6 +100,24 @@
       </section>`;
   }
 
+  /* полоса-баннер: гостям/без подписки — предложение тарифов, участникам — статус */
+  function promoStrip() {
+    const t = AP.tier();
+    if (t === "guest" || t === "free") {
+      return `
+        <a class="promo-strip" href="plans.html">
+          <span class="ps-ico">⭐</span>
+          <span class="ps-txt"><b>VIP-клуб Alex Play</b><br>
+            <span class="ps-sub">Игры выходят первыми и со скидкой 40% · Premium — ещё больше привилегий</span></span>
+          <span class="ps-go">Тарифы →</span>
+        </a>`;
+    }
+    if (t === "admin") return `<div class="promo-strip member admin">🛡 <b>ALEX</b> — главный аккаунт: в магазине всё бесплатно, включены все привилегии Premium</div>`;
+    if (t === "premium") return `<div class="promo-strip member premium">👑 <b>Premium активна</b> — скидка 40% на игры, 20% на приложения, игры и новинки первыми</div>`;
+    if (t === "vip") return `<div class="promo-strip member vip">⭐ <b>VIP активна</b> — игры выходят первыми, скидка 40% на все игры</div>`;
+    return "";
+  }
+
   function renderHome() {
     const byReviews = [...APPS].sort((x, y) => y.reviews - x.reviews);
     const byNew = [...APPS].sort((x, y) => y.added.localeCompare(x.added));
@@ -100,16 +127,31 @@
     const apps = APPS.filter(a => a.category !== "Игры");
     const paid = APPS.filter(a => a.price !== "Бесплатно");
 
+    /* порядок секций по тарифу: VIP/Premium — игры первыми; Premium — и новинки сразу после игр */
+    const rows = [
+      ["Популярные", byReviews.slice(0, 10), null],
+      ["Платные", paid, null],
+      ["Новинки", byNew.slice(0, 8), null],
+      ["Топ по рейтингу", byRating.slice(0, 8), null],
+      ["Игры", games, "?cat=Игры"],
+      ["Приложения", apps.slice(0, 10), "?cat=Приложения"]
+    ];
+    const t = AP.tier();
+    if (t === "vip" || t === "premium" || t === "admin") {
+      const gi = rows.findIndex(r => r[0] === "Игры");
+      rows.unshift(rows.splice(gi, 1)[0]);
+      if (t === "premium" || t === "admin") {
+        const ni = rows.findIndex(r => r[0] === "Новинки");
+        rows.splice(1, 0, rows.splice(ni, 1)[0]);
+      }
+    }
+
     $("#chips").innerHTML = chipsHTML("Все");
     content.innerHTML =
       hero(featured) +
+      promoStrip() +
       authorBand() +
-      section("Популярные", byReviews.slice(0, 10)) +
-      section("Платные", paid) +
-      section("Новинки", byNew.slice(0, 8)) +
-      section("Топ по рейтингу", byRating.slice(0, 8)) +
-      section("Игры", games, "?cat=Игры") +
-      section("Приложения", apps.slice(0, 10), "?cat=Приложения");
+      rows.map(r => section(r[0], r[1], r[2])).join("");
   }
 
   function renderCategory(cat) {
@@ -197,6 +239,9 @@
     if (e.key === "Enter") { clearTimeout(t); const v = qInput.value.trim(); history.replaceState(null, "", v ? `?q=${encodeURIComponent(v)}` : "./"); render(); }
     if (e.key === "Escape") { qInput.value = ""; history.replaceState(null, "", "./"); render(); }
   });
+
+  /* смена аккаунта или тарифа — перерисовать каталог с новыми ценами */
+  window.addEventListener("ap:auth", render);
 
   render();
 })();
